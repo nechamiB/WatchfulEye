@@ -14,7 +14,7 @@ Yolo::Yolo() {
 	}
 }
 
-// Pre-processes the input image and performs forward pass in the YOLO network.
+// Pre-processes theinput image and performs forward pass in the YOLO network.
 // Returns the network outputs (detections) as a vector of Mats.
 vector<Mat> Yolo::pre_process(Mat& input_image, cv::dnn::Net& net)
 {
@@ -107,8 +107,8 @@ void Yolo::process_detected_results(Mat& input_image,
 		rectangle(input_image, Point(left, top), Point(left + width, top + height), BLUE, 3 * THICKNESS);
 		if (class_list[class_ids[idx]] == ITEMS_TO_DETECTION) {
 			string label = format("%.2f", confidences[idx]);
-			label = class_list[class_ids[idx]] + ":" + label;
-			draw_label(input_image, label, left, top);
+			//label = class_list[class_ids[idx]] + ":" + label;
+			//draw_label(input_image, label, left, top);
 			sqlite.insertData(sqlite.path, input_image, box, timestamp);
 			Logging::writeTolog(spdlog::level::info, "The frame saved in the data base");
 		}

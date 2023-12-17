@@ -8,6 +8,13 @@ class Yolo
 {
 public:
 #ifdef _WIN32
+#define YOLO_PATH R"(C:\projectSources\yolov5s.onnx)"
+
+#else
+#define YOLO_PATH R"(../../../../projectSources/yolov5s.onnx)"
+#endif
+
+#ifdef _WIN32
 #define ITEMS_TO_DETECTION_PATH R"(C:\projectSources\classes.txt)"
 #else
 #define ITEMS_TO_DETECTION_PATH R"(../../../../projectSources/classes.txt)"

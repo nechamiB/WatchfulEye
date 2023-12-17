@@ -14,7 +14,6 @@ int Sqlite::createTable(const char* s) {
 	rc = sqlite3_exec(db, sql, NULL, NULL, NULL);
 	isValid = IsValid(rc, db, "Error creating table: ");
 
-
 	// Close the connection to the database.
 	sqlite3_close(db);
 
@@ -44,12 +43,10 @@ int Sqlite::insertData(const char* s, Mat& image, Rect originalBox, string time)
 		std::to_string(avgs.AvgB) + ");";
 
 	rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-
 	int isValid = IsValid(rc, db, "Error opening database: ");
 
 	// Close the connection to the database.
 	sqlite3_close(db);
-
 	cout << "Data inserted successfuly" << endl;
 	return 0;
 }
