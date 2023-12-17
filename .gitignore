@@ -1,0 +1,9 @@
+/.vs
+/WatchfulEye/.vs/WatchfulEye
+/WatchfulEye/WatchfulEye/x64/Debug
+*.user
+*.jpg
+/WatchfulEye/x64/Debug
+WatchfulEye/WatchfulEyeTest/x64/Debug/
+WatchfulEye/CMake
+WatchfulEye/build
