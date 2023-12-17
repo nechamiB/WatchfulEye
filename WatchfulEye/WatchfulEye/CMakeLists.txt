@@ -1,5 +1,4 @@
 set(PROJECT_NAME WatchfulEye)
-set(PROJECT_NAME_EXE WatchfulEyeExe)
 
 # ---------------------------------------------------------------------------------------
 # Source groups
@@ -12,11 +11,16 @@ set(Header_Files
     "Queue.h"
     "Sqlite.h"
     "sqlite-amalgamation/sqlite3.h"
+    "‏‏ConfigurationCamera.h"
+    "‏‏ConfigurationServer.h"
+    #if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    #"ConfigurationCamera.h"
+    #"ConfigurationServer.h"
+    #endif()
 )
 source_group("Header Files" FILES ${Header_Files})
 
 set(Source_Files
-    "main.cpp"
     "Yolo.cpp"
     "Logging.cpp"
     "Camera.cpp"
@@ -24,6 +28,12 @@ set(Source_Files
     "Queue.cpp"
     "Sqlite.cpp"
     "sqlite-amalgamation/sqlite3.c"
+    "‏‏ConfigurationCamera.cpp"
+    "‏‏ConfigurationServer.cpp"
+   #if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   #"ConfigurationCamera.cpp"
+   #"ConfigurationServer.cpp"
+   #endif()
 )
 source_group("Source Files" FILES ${Source_Files})
 
@@ -68,16 +78,10 @@ find_package(spdlog REQUIRED)
 add_library(${PROJECT_NAME} ${ALL_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
-add_executable(${PROJECT_NAME_EXE} ${ALL_FILES})
-#target_link_libraries(${PROJECT_NAME_EXE} PRIVATE ${PROJECT_NAME})
-
-target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads ${OpenCV_LIBS}  ${CMAKE_DL_LIBS} spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
-
-target_link_libraries(${PROJECT_NAME_EXE} PUBLIC Threads::Threads ${OpenCV_LIBS}  ${CMAKE_DL_LIBS} spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
+target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads ${OpenCV_LIBS}  ${CMAKE_DL_LIBS} spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32> myproto)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 target_link_libraries(${PROJECT_NAME} PUBLIC ncurses)
-target_link_libraries(${PROJECT_NAME_EXE} PUBLIC ncurses)
 endif()
 
 # ---------------------------------------------------------------------------------------

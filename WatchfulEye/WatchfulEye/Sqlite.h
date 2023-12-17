@@ -3,17 +3,11 @@
 #include <iostream>
 #include "opencv2/opencv.hpp"
 #include "sqlite-amalgamation/sqlite3.h"
-
-using namespace std;
-
 #ifdef _WIN32
-#define DB_PATH R"(C:\projectSources\sqlite\db\watchfulEye.db)"
+#include "þþConfigurationServer.h"
 #else
-#define DB_PATH "../../../../projectSources/sqlite/db/watchfulEye.db"
+#include "ConfigurationServer.h"
 #endif
-
-using namespace std;
-using namespace cv;
 
 struct Avgs {
 	int AvgR;
@@ -25,14 +19,14 @@ struct Avgs {
 #define GChannel 1
 #define BChannel 2
 
-class Sqlite
-{
+class Sqlite {
+private:
+	static ConfigurationServer configurationServer;
 public:
-	const char* path = DB_PATH;
-	int createTable(const char* s);
-	int insertData(const char* s, Mat& image, Rect originalBox, string time);
-	Rect NormalizeBox(const Rect& originalBox, cv::Mat& image);
-	Avgs calcAvgs(cv::Mat& image, Rect box);
-	int IsValid(int rc, sqlite3* db, string message);
+	static std::string path;
+	int createTable(std::string path);
+	int insertData(std::string path, cv::Mat& image, cv::Rect originalBox, std::string time);
+	cv::Rect NormalizeBox(const cv::Rect& originalBox, cv::Mat& image);
+	Avgs calcAvgs(cv::Mat& image, cv::Rect box);
+	int IsValid(int rc, sqlite3* db, std::string message);
 };
-

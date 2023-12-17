@@ -14,7 +14,7 @@ TEST_CASE("check_calcAvg_function") {
 	im.at<cv::Vec3b>(2, 1) = cv::Vec3b(10, 123, 4);
 	im.at<cv::Vec3b>(2, 2) = cv::Vec3b(10, 123, 4);
 	Sqlite sqlite;
-	Avgs avg = sqlite.calcAvgs(im, Rect(0, 0, 3, 3));
+	Avgs avg = sqlite.calcAvgs(im, cv::Rect(0, 0, 3, 3));
 	REQUIRE(avg.AvgB == 10);
 	REQUIRE(avg.AvgG == 123);
 	REQUIRE(avg.AvgR == 4);

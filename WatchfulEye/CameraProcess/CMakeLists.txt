@@ -1,25 +1,16 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(WatchfulEyeTest)
-set(PROJECT_NAME WatchfulEyeTest)
+project(CameraProcess)
+set(PROJECT_NAME CameraProcess)
 
 # ---------------------------------------------------------------------------------------
 # Source groups
 # ---------------------------------------------------------------------------------------
 
-set(Source_Files "protectedQueue.cpp"
-				 "calcAvg.cpp"
-				 "cmpFrames.cpp"
-				 "improveQueue.cpp"
+set(Source_Files 
+				 "main.cpp"
 				 )
 set(ALL_FILES ${Source_Files})
-
-
-# ---------------------------------------------------------------------------------------
-# Catch2
-# ---------------------------------------------------------------------------------------
-
-find_package(Catch2 3 REQUIRED)
 
 # ---------------------------------------------------------------------------------------
 # Threads
@@ -58,5 +49,7 @@ add_executable(${PROJECT_NAME} ${ALL_FILES})
 
 target_link_libraries(${PROJECT_NAME}
 					  PUBLIC
-					  Catch2::Catch2WithMain
+					  Threads::Threads
+					  spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
+					  ${OpenCV_LIBS}
 					  WatchfulEye)

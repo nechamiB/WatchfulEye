@@ -2,6 +2,8 @@
 #include "opencv2/opencv.hpp"
 #include "Camera.h"
 
+using namespace cv;
+
 TEST_CASE("check_cmpFrames_function") {
 	uint8_t buff[] = { 1,2,3,4,5,6,7,8,9 };
 	uint8_t buff1[] = { 11,12,14,15,16,17,18,19,20 };
@@ -11,7 +13,6 @@ TEST_CASE("check_cmpFrames_function") {
 	Mat frames1(3, 3, CV_8UC1, buff1);
 	Mat frames2(3, 3, CV_8UC1, buff2);
 	Mat frames3(3, 3, CV_8UC1, buff3);
-
 	Camera camera;
 	bool a = camera.cmpFrames(frames, frames1);
 	bool b = camera.cmpFrames(frames2, frames3);

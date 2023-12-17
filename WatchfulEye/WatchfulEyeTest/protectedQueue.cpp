@@ -15,7 +15,10 @@ TEST_CASE("VideoFrameQueue concurrent push test") {
 		VideoFrameData frameData;
 		uint8_t buff[] = { 1,1,3,4,5,6,7,8,9 };
 		Mat frames(3, 3, CV_8UC1, buff);
-		frameData.timestamp = "2023-08-28";
+
+		string time = "14:03";
+
+		frameData.timestamp = time;
 		frameData.frame = frames;
 		// Push the frameData to the queue using the push function
 		frameQueue.push(frameData);

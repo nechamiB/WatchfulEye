@@ -78,3 +78,6 @@ enable_testing()
 
 add_subdirectory(WatchfulEye)
 add_subdirectory(WatchfulEyeTest)
+add_subdirectory(CameraProcess)
+add_subdirectory(ServerProcess)
+add_subdirectory(Service)

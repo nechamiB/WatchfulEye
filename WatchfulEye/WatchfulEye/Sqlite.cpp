@@ -1,12 +1,16 @@
 #include "Sqlite.h"
-#include "Logging.h"
 
 using namespace std;
+using namespace cv;
 
-int Sqlite::createTable(const char* s) {
+//Initialize the static variables.are used to get the configurations
+ConfigurationServer Sqlite::configurationServer;
+string Sqlite::path = configurationServer.getSqliteMembers();
+
+int Sqlite::createTable(string path) {
 	//Create a connection to the database.
 	sqlite3* db;
-	int rc = sqlite3_open(s, &db);
+	int rc = sqlite3_open(path.c_str(), &db);
 	int isValid = IsValid(rc, db, "Error opening database: ");
 
 	// Create the table.
@@ -21,23 +25,20 @@ int Sqlite::createTable(const char* s) {
 	return 0;
 }
 
-int Sqlite::insertData(const char* s, Mat& image, Rect originalBox, string time)
+int Sqlite::insertData(string path, Mat& image, Rect originalBox, string time)
 {
 	Rect box = NormalizeBox(originalBox, image);
 	Avgs avgs = calcAvgs(image, box);
 
 	sqlite3* db;
-	int rc = sqlite3_open(s, &db);
-
-	string timeStamp = time;
-	cout << "time i got: " << timeStamp << endl;
+	int rc = sqlite3_open(path.c_str(), &db);
 
 	std::string sql = "INSERT INTO detections (width, height, top, left, time, AvgR, AvgG, AvgB) VALUES (" +
 		std::to_string(box.width) + ", " +
 		std::to_string(box.height) + ", " +
 		std::to_string(box.y) + ", " +
 		std::to_string(box.x) + ", '" +
-		timeStamp + "', " +
+		time + "', " +
 		std::to_string(avgs.AvgR) + ", " +
 		std::to_string(avgs.AvgG) + ", " +
 		std::to_string(avgs.AvgB) + ");";

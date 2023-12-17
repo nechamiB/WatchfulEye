@@ -5,21 +5,12 @@
 #include "Logging.h"
 
 class Yolo
-{
+{	
+private:
+	static ConfigurationServer configurationServer;
+	static yoloMembers yoloMember;
+	Sqlite sqlite;
 public:
-#ifdef _WIN32
-#define YOLO_PATH R"(C:\projectSources\yolov5s.onnx)"
-
-#else
-#define YOLO_PATH R"(../../../../projectSources/yolov5s.onnx)"
-#endif
-
-#ifdef _WIN32
-#define ITEMS_TO_DETECTION_PATH R"(C:\projectSources\classes.txt)"
-#else
-#define ITEMS_TO_DETECTION_PATH R"(../../../../projectSources/classes.txt)"
-#endif
-#define ITEMS_TO_DETECTION "car"
 #define ROWS 25200
 #define CX 0
 #define CY 1
@@ -44,17 +35,16 @@ public:
 	cv::Scalar YELLOW = cv::Scalar(0, 255, 255);
 	cv::Scalar RED = cv::Scalar(0, 0, 255);
 
-
 	std::vector<std::string>class_list;
-	Sqlite sqlite;
 	//functions
 	Yolo();
+
 	std::vector<cv::Mat> pre_process(cv::Mat& input_image, cv::dnn::Net& net);
 
 	cv::Mat post_process(cv::Mat& input_image,
 		std::vector<cv::Mat>& outputs,
 		const std::vector<std::string>& class_list,
-		string timestamp);
+		std::string timestamp);
 
 	void detect_objects(cv::Mat& input_image,
 		std::vector<cv::Mat>& outputs,
@@ -72,7 +62,7 @@ public:
 		const std::vector<int>& class_ids,
 		const std::vector<float>& confidences,
 		const std::vector<cv::Rect>& boxes,
-		string timestamp, std::vector<int> indices);
+		std::string timestamp, std::vector<int> indices);
 
 	void draw_label(cv::Mat& input_image, std::string label, int left, int top);
 };

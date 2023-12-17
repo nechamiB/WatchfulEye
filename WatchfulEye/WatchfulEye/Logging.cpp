@@ -1,8 +1,31 @@
 #include "Logging.h"
+
 using namespace std;
 
 std::vector<std::shared_ptr<spdlog::logger>>Logging::loggers;
 
+ // Write the logging configuration to a separate file
+ void Logging::createJsonLoging(LoggerType type, const std::string loggerName, spdlog::level::level_enum level,
+	 const string fileName, size_t maxFileSize, size_t maxFiles) {
+	 json loggingConfig;
+
+	 loggingConfig["type"] = type;
+	 loggingConfig["loggerName"] = loggerName;
+	 loggingConfig["level"] = level;
+	 loggingConfig["fileName"] = fileName;
+	 loggingConfig["maxFileSize"] = maxFileSize;
+	 loggingConfig["maxFiles"] = maxFiles;
+
+	 std::ofstream loggingConfigFile("logging_config.json");
+	 if (loggingConfigFile.is_open()) {
+		 loggingConfigFile << std::setw(4) << loggingConfig << std::endl;
+	 }
+	 else {
+		 Logging::writeTolog(spdlog::level::err, "Unable to write loging config file.");
+	 }
+ }
+
+//Converts a custom logging level to a corresponding
 spdlog::level::level_enum Logging::getLevel(spdlog::level::level_enum level) {
 	switch (level) {
 	case spdlog::level::level_enum::trace:
@@ -21,6 +44,8 @@ spdlog::level::level_enum Logging::getLevel(spdlog::level::level_enum level) {
 	return spdlog::level::debug;
 }
 
+
+//Create a logger based on the specified type that was selected by the user.
 void Logging::createLogger(LoggerType type, const std::string loggerName, spdlog::level::level_enum level,
 	const string fileName, size_t maxFileSize, size_t maxFiles) {
 	std::shared_ptr<spdlog::logger> logger;
@@ -48,6 +73,8 @@ void Logging::closeSpdlog()
 	spdlog::drop_all();
 }
 
+//Writes a log message to all registered loggers
+// based on the specified log level.
 void Logging::writeTolog(spdlog::level::level_enum loggerType, std::string messege)
 {
 	for (std::shared_ptr<spdlog::logger> logger : loggers)
@@ -81,6 +108,7 @@ void Logging::writeTolog(spdlog::level::level_enum loggerType, std::string messe
 		}
 	}
 }
+//Initializes the logger configuration based on user input and create the logger
 void Logging::initLogger()
 {
 	string userAnswer;
@@ -124,18 +152,26 @@ void Logging::initLogger()
 				size_t maxFileSize, maxFiles;
 				cin >> maxFileSize;
 				cin >> maxFiles;
+				createJsonLoging(typeLog, loggerName, tyeLev, fileName, maxFileSize, maxFiles);
 				createLogger(typeLog, loggerName, tyeLev, fileName, maxFileSize, maxFiles);
 			}
 			else
+			{
+				createJsonLoging(typeLog, loggerName, tyeLev, fileName);
 				createLogger(typeLog, loggerName, tyeLev, fileName);
+			}
 		}
 		else
+		{
+			createJsonLoging(typeLog, loggerName, tyeLev);
 			createLogger(typeLog, loggerName, tyeLev);
-
+		}
 		cout << "Do you want to choose another logger? (yes/no)";
 		cin >> userAnswer;
 	}
-	if (!isChoosed)
+	if (!isChoosed) {
+		createJsonLoging();
 		createLogger();
-}
 
+	}
+}

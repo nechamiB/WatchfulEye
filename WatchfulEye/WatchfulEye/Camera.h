@@ -1,14 +1,28 @@
-#define INEQUALITY_PERCENTAGES_TO_DECIPHER 0.007
-#define SENSITIVITY_TO_DIFF_BETWEEN_PIXELS 15
-
-#include "Queue.h"
-#include "Yolo.h"
+#include <grpc/grpc.h>
+#include <grpcpp/create_channel.h>
+#include "myproto/frameVideo.grpc.pb.h"
+#include <chrono>
+#ifdef _WIN32
+#include <conio.h>
+#include <windows.h>
+#include "þþConfigurationCamera.h"
+#else
+#include "þþConfigurationCamera.h"
+#include <unistd.h>
+#include <ncurses.h>
+#endif
 #include "opencv2/opencv.hpp"
 
+
 class Camera {
+private:
+	static ConfigurationCamera configurationCamera;
+	static cameraMembers cameraMember;
+	std::unique_ptr<framevideoPackage::FrameVideoService::Stub> stub;
 public:
 	void start();
-	void pushToTheQueue(VideoCapture cap, cv::Mat frame);
-	bool cmpFrames(Mat prevFrame, Mat frame);
-	string calcTime();
+	bool cmpFrames(cv::Mat prevFrame, cv::Mat frame);
+	std::string calcTime();
+	void InitializeChannelAndStub();
+	void sendToServer(cv::VideoCapture cap, cv::Mat frame, std::string timeStamp);
 };

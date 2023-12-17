@@ -3,14 +3,24 @@
 using namespace std;
 using namespace cv;
 
+//Initialize the static variables.are used to get the configurations
+ConfigurationServer Yolo::configurationServer;
+yoloMembers Yolo::yoloMember = configurationServer.getYoloMembers();
+
 Yolo::Yolo() {
-	ifstream ifs(ITEMS_TO_DETECTION_PATH);
-	if (!ifs)
-		Logging::writeTolog(spdlog::level::err, "Error opening classes file");
-	string line;
-	while (getline(ifs, line))
-	{
-		class_list.push_back(line);
+	try {
+		ifstream ifs(yoloMember.detectionPath);
+		if (!ifs.is_open()) {
+			throw std::runtime_error("Error opening classes file");
+		}
+		string line;
+		while (getline(ifs, line))
+		{
+			class_list.push_back(line);
+		}
+	}
+	catch (const std::exception& e) {
+		Logging::writeTolog(spdlog::level::err, e.what());
 	}
 }
 
@@ -105,7 +115,7 @@ void Yolo::process_detected_results(Mat& input_image,
 		int height = box.height;
 
 		rectangle(input_image, Point(left, top), Point(left + width, top + height), BLUE, 3 * THICKNESS);
-		if (class_list[class_ids[idx]] == ITEMS_TO_DETECTION) {
+		if (class_list[class_ids[idx]] == yoloMember.itemToDetect) {
 			string label = format("%.2f", confidences[idx]);
 			//label = class_list[class_ids[idx]] + ":" + label;
 			//draw_label(input_image, label, left, top);
