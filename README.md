@@ -1,2 +1,1 @@
-# WatchfulEye
-A smart system for CCTV analysis
+# MobileyeBootcamp_RBNY
